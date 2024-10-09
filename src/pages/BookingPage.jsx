@@ -1,5 +1,6 @@
-import { useEffect, useState, useCallback } from "react"; // Import useCallback
-import { Button, Form, Container, ListGroup } from "react-bootstrap";
+// frontend/src/pages/BookingPage.jsx
+import { useEffect, useState, useCallback } from "react";
+import { Button, Form, Container, ListGroup, Modal } from "react-bootstrap";
 import axios from "axios";
 import useLocalStorage from "use-local-storage";
 import { useNavigate } from "react-router-dom";
@@ -13,109 +14,199 @@ export default function BookingPage() {
     const [time, setTime] = useState("");
     const [phone_number, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
+    const [selectedBooking, setSelectedBooking] = useState(null);
+    const [modalShow, setModalShow] = useState(false);
     const navigate = useNavigate();
 
+    const API_BASE_URL = "https://fb2dcf97-2ec6-4dc2-87f0-ed2503227345-00-1gsnpo73xkz2q.pike.replit.dev/";
+
     const fetchBookings = useCallback(async () => {
-        if (!authToken) return; // Only fetch bookings if authToken is available
+        if (!authToken) return;
         try {
-            const response = await axios.get("https://fb2dcf97-2ec6-4dc2-87f0-ed2503227345-00-1gsnpo73xkz2q.pike.replit.dev/bookings", {
+            const response = await axios.get(`${API_BASE_URL}/bookings`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             setBookings(response.data);
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching bookings:", error);
         }
-    }, [authToken]); // Add authToken as a dependency
+    }, [authToken]);
 
     useEffect(() => {
         if (!authToken) {
             navigate("/login");
         } else {
-            fetchBookings(); // Fetch bookings when authToken changes or on mount
+            fetchBookings();
         }
-    }, [authToken, fetchBookings, navigate]); // Add fetchBookings to the dependency array
+    }, [authToken, fetchBookings, navigate]);
 
-    const handleCreateBooking = async (e) => {
+    const handleCreateOrUpdateBooking = async (e) => {
         e.preventDefault();
+        const bookingData = {
+            title,
+            description,
+            date,
+            time,
+            phone_number,
+            email,
+        };
+
         try {
-            await axios.post("https://fb2dcf97-2ec6-4dc2-87f0-ed2503227345-00-1gsnpo73xkz2q.pike.replit.dev/bookings", {
-                title,
-                description,
-                date,
-                time,
-                phone_number,
-                email,
-                user_id: "user_id_placeholder", // Replace with actual user ID if needed
-            }, {
-                headers: { Authorization: `Bearer ${authToken}` },
-            });
-            fetchBookings(); // Refresh booking list
-            // Clear the form after submission
-            setTitle("");
-            setDescription("");
-            setDate("");
-            setTime("");
-            setPhoneNumber("");
-            setEmail("");
+            if (selectedBooking) {
+                // Update booking
+                await axios.put(`${API_BASE_URL}/bookings/${selectedBooking.id}`, bookingData, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+            } else {
+                // Create booking
+                await axios.post(`${API_BASE_URL}/bookings`, bookingData, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+            }
+            fetchBookings();
+            handleCloseModal();
         } catch (error) {
-            console.error(error);
+            console.error("Error creating/updating booking:", error);
         }
     };
 
     const handleDeleteBooking = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this booking?")) return;
         try {
-            await axios.delete(`https://fb2dcf97-2ec6-4dc2-87f0-ed2503227345-00-1gsnpo73xkz2q.pike.replit.dev/bookings/${id}`, {
+            await axios.delete(`${API_BASE_URL}/bookings/${id}`, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
-            fetchBookings(); // Refresh booking list
+            fetchBookings();
         } catch (error) {
-            console.error(error);
+            console.error("Error deleting booking:", error);
         }
     };
 
-    return (
-        <Container>
-            <h2>Create Booking</h2>
-            <Form onSubmit={handleCreateBooking}>
-                <Form.Group controlId="formTitle">
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-                </Form.Group>
-                <Form.Group controlId="formDescription">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control type="text" value={description} onChange={(e) => setDescription(e.target.value)} required />
-                </Form.Group>
-                <Form.Group controlId="formDate">
-                    <Form.Label>Date</Form.Label>
-                    <Form.Control type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-                </Form.Group>
-                <Form.Group controlId="formTime">
-                    <Form.Label>Time</Form.Label>
-                    <Form.Control type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
-                </Form.Group>
-                <Form.Group controlId="formPhone">
-                    <Form.Label>Phone Number</Form.Label>
-                    <Form.Control type="tel" value={phone_number} onChange={(e) => setPhoneNumber(e.target.value)} required />
-                </Form.Group>
-                <Form.Group controlId="formEmail">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                </Form.Group>
-                <Button type="submit">Create Booking</Button>
-            </Form>
+    const handleEditBooking = (booking) => {
+        setSelectedBooking(booking);
+        setTitle(booking.title);
+        setDescription(booking.description);
+        setDate(booking.date.split('T')[0]); // Format date for input
+        setTime(booking.time.slice(0, 5)); // Format time for input
+        setPhoneNumber(booking.phone_number);
+        setEmail(booking.email);
+        setModalShow(true);
+    };
 
-            <h2 className="mt-5">Your Bookings</h2>
+    const handleCloseModal = () => {
+        setModalShow(false);
+        setSelectedBooking(null);
+        setTitle("");
+        setDescription("");
+        setDate("");
+        setTime("");
+        setPhoneNumber("");
+        setEmail("");
+    };
+
+    return (
+        <Container className="mt-4">
+            <h2>Bookings</h2>
+            <Button variant="primary" onClick={() => setModalShow(true)} className="mb-3">
+                Create New Booking
+            </Button>
+
+            {/* Booking List */}
             <ListGroup>
                 {bookings.map((booking) => (
                     <ListGroup.Item key={booking.id}>
                         <h5>{booking.title}</h5>
                         <p>{booking.description}</p>
-                        <p>Date: {booking.date} Time: {booking.time}</p>
-                        <p>Phone: {booking.phone_number} Email: {booking.email}</p>
-                        <Button variant="danger" onClick={() => handleDeleteBooking(booking.id)}>Delete</Button>
+                        <p><strong>Date:</strong> {booking.date} <strong>Time:</strong> {booking.time}</p>
+                        <p><strong>Phone:</strong> {booking.phone_number} <strong>Email:</strong> {booking.email}</p>
+                        <Button variant="warning" size="sm" onClick={() => handleEditBooking(booking)} className="me-2">
+                            Edit
+                        </Button>
+                        <Button variant="danger" size="sm" onClick={() => handleDeleteBooking(booking.id)}>
+                            Delete
+                        </Button>
                     </ListGroup.Item>
                 ))}
             </ListGroup>
+
+            {/* Modal for Create/Update Booking */}
+            <Modal show={modalShow} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{selectedBooking ? "Update Booking" : "Create Booking"}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleCreateOrUpdateBooking}>
+                        <Form.Group className="mb-3" controlId="formTitle">
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter booking title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formDescription">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder="Enter description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formDate">
+                            <Form.Label>Date</Form.Label>
+                            <Form.Control
+                                type="date"
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formTime">
+                            <Form.Label>Time</Form.Label>
+                            <Form.Control
+                                type="time"
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formPhoneNumber">
+                            <Form.Label>Phone Number</Form.Label>
+                            <Form.Control
+                                type="tel"
+                                placeholder="Enter phone number"
+                                value={phone_number}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Enter email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Button variant="primary" type="submit">
+                            {selectedBooking ? "Update Booking" : "Create Booking"}
+                        </Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
         </Container>
     );
 }

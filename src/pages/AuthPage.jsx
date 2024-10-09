@@ -20,7 +20,7 @@ export default function AuthPage() {
         if (authToken) {
             navigate("/profile");
         }
-    }, [authToken, navigate]);
+    }, [authToken, navigate])
 
     const handleSignUp = async (e) => {
         e.preventDefault();

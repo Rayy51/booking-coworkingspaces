@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Navbar, Container, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import useLocalStorage from "use-local-storage";
 
 export default function ProfilePage() {
@@ -19,14 +19,16 @@ export default function ProfilePage() {
 
     return (
         <>
-            <Navbar bg="light">
+            <Navbar bg="light" expand="lg">
                 <Container>
-                    <Navbar.Brand href="/">
+                    <Navbar.Brand as={Link} to="/">
                         <i
-                            className="bi bi-twitter"
+                            className="bi bi-buildings"
                             style={{ fontSize: 30, color: "dodgerblue" }}
-                        ></i>
+                        ></i>{" "}
+                        Co-Working Space
                     </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse className="justify-content-end">
                         <Button variant="primary" onClick={handleLogout}>
                             Logout
@@ -35,8 +37,12 @@ export default function ProfilePage() {
                 </Container>
             </Navbar>
 
-            <Container className="mt-3">
-                <h2>Your profile</h2>
+            <Container className="mt-4">
+                <h2>Your Profile</h2>
+                {/* You can add more profile details here */}
+                <Button as={Link} to="/bookings" variant="secondary" className="mt-3">
+                    Manage Bookings
+                </Button>
             </Container>
         </>
     );
