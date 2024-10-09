@@ -1,5 +1,6 @@
+
 import { useEffect } from "react";
-import { Navbar, Container, Button } from "react-bootstrap";
+import { Navbar, Container, Button, Nav } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import useLocalStorage from "use-local-storage";
 
@@ -30,9 +31,14 @@ export default function ProfilePage() {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse className="justify-content-end">
-                        <Button variant="primary" onClick={handleLogout}>
-                            Logout
-                        </Button>
+                        <Nav>
+                            <Button variant="primary" onClick={handleLogout} className="me-2">
+                                Logout
+                            </Button>
+                            <Button as={Link} to="/bookings" variant="secondary">
+                                Manage Bookings
+                            </Button>
+                        </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
@@ -40,8 +46,10 @@ export default function ProfilePage() {
             <Container className="mt-4">
                 <h2>Your Profile</h2>
                 {/* You can add more profile details here */}
+                <p>Welcome to your profile page!</p>
+                {/* Navigation to Bookings */}
                 <Button as={Link} to="/bookings" variant="secondary" className="mt-3">
-                    Manage Bookings
+                    Go to Bookings
                 </Button>
             </Container>
         </>

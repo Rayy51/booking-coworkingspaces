@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function AuthPage() {
     const loginImage = 'src/assets/coworking.png';
-    const url = "https://fb2dcf97-2ec6-4dc2-87f0-ed2503227345-00-1gsnpo73xkz2q.pike.replit.dev";
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const [modalShow, setModalShow] = useState(null);
     const handleShowSignUp = () => setModalShow("SignUp");
     const handleShowLogin = () => setModalShow("Login");
@@ -25,7 +25,7 @@ export default function AuthPage() {
     const handleSignUp = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${url}/signup`, { username, password });
+            const res = await axios.post(`${API_BASE_URL}/signup`, { username, password });
             console.log(res.data);
         } catch (error) {
             console.error(error);
@@ -35,13 +35,17 @@ export default function AuthPage() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${url}/login`, { username, password });
+            const res = await axios.post(`${API_BASE_URL}/login`, { username, password });
             if (res.data && res.data.auth === true && res.data.token) {
                 setAuthToken(res.data.token);
                 console.log("Login was successful, token saved");
+
+            } else {
+                alert("Invalid login response");
             }
         } catch (error) {
             console.error(error);
+            alert(error.response?.data?.message || "Login failed");
         }
     };
     const handleClose = () => setModalShow(null);

@@ -1,6 +1,6 @@
 // frontend/src/pages/BookingPage.jsx
 import { useEffect, useState, useCallback } from "react";
-import { Button, Form, Container, ListGroup, Modal } from "react-bootstrap";
+import { Button, Form, Container, ListGroup, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import useLocalStorage from "use-local-storage";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ export default function BookingPage() {
     const [modalShow, setModalShow] = useState(false);
     const navigate = useNavigate();
 
-    const API_BASE_URL = "https://fb2dcf97-2ec6-4dc2-87f0-ed2503227345-00-1gsnpo73xkz2q.pike.replit.dev/";
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const fetchBookings = useCallback(async () => {
         if (!authToken) return;
@@ -29,8 +29,12 @@ export default function BookingPage() {
             setBookings(response.data);
         } catch (error) {
             console.error("Error fetching bookings:", error);
+            if (error.response?.status === 403) {
+                alert("Session expired. Please log in again.");
+                navigate("/login");
+            }
         }
-    }, [authToken]);
+    }, [authToken, API_BASE_URL, navigate]);
 
     useEffect(() => {
         if (!authToken) {
@@ -67,6 +71,7 @@ export default function BookingPage() {
             handleCloseModal();
         } catch (error) {
             console.error("Error creating/updating booking:", error);
+            alert(error.response?.data?.error || "An error occurred");
         }
     };
 
@@ -79,6 +84,7 @@ export default function BookingPage() {
             fetchBookings();
         } catch (error) {
             console.error("Error deleting booking:", error);
+            alert(error.response?.data?.error || "An error occurred");
         }
     };
 
@@ -106,28 +112,44 @@ export default function BookingPage() {
 
     return (
         <Container className="mt-4">
-            <h2>Bookings</h2>
-            <Button variant="primary" onClick={() => setModalShow(true)} className="mb-3">
-                Create New Booking
-            </Button>
+            <Row className="mb-3">
+                <Col>
+                    <h2>Manage Your Bookings</h2>
+                </Col>
+                <Col className="text-end">
+                    <Button variant="primary" onClick={() => setModalShow(true)}>
+                        Create New Booking
+                    </Button>
+                </Col>
+            </Row>
 
             {/* Booking List */}
-            <ListGroup>
-                {bookings.map((booking) => (
-                    <ListGroup.Item key={booking.id}>
-                        <h5>{booking.title}</h5>
-                        <p>{booking.description}</p>
-                        <p><strong>Date:</strong> {booking.date} <strong>Time:</strong> {booking.time}</p>
-                        <p><strong>Phone:</strong> {booking.phone_number} <strong>Email:</strong> {booking.email}</p>
-                        <Button variant="warning" size="sm" onClick={() => handleEditBooking(booking)} className="me-2">
-                            Edit
-                        </Button>
-                        <Button variant="danger" size="sm" onClick={() => handleDeleteBooking(booking.id)}>
-                            Delete
-                        </Button>
-                    </ListGroup.Item>
-                ))}
-            </ListGroup>
+            {bookings.length > 0 ? (
+                <ListGroup>
+                    {bookings.map((booking) => (
+                        <ListGroup.Item key={booking.id}>
+                            <Row>
+                                <Col md={8}>
+                                    <h5>{booking.title}</h5>
+                                    <p>{booking.description}</p>
+                                    <p><strong>Date:</strong> {booking.date} <strong>Time:</strong> {booking.time}</p>
+                                    <p><strong>Phone:</strong> {booking.phone_number} <strong>Email:</strong> {booking.email}</p>
+                                </Col>
+                                <Col md={4} className="d-flex align-items-center justify-content-end">
+                                    <Button variant="warning" size="sm" onClick={() => handleEditBooking(booking)} className="me-2">
+                                        Edit
+                                    </Button>
+                                    <Button variant="danger" size="sm" onClick={() => handleDeleteBooking(booking.id)}>
+                                        Delete
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
+            ) : (
+                <p>No bookings found. Create one!</p>
+            )}
 
             {/* Modal for Create/Update Booking */}
             <Modal show={modalShow} onHide={handleCloseModal} centered>
