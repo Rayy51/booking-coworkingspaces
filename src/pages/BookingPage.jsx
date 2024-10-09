@@ -4,10 +4,16 @@ import { Button, Form, Container, ListGroup, Modal, Row, Col } from "react-boots
 import axios from "axios";
 import useLocalStorage from "use-local-storage";
 import { useNavigate } from "react-router-dom";
+import RoomCard from "../components/RoomCard";
 
 export default function BookingPage() {
     const [authToken] = useLocalStorage("authToken", "");
     const [bookings, setBookings] = useState([]);
+    const [rooms] = useState([
+        { id: 1, title: "City View Room", description: "A spacious room for general meetings", imageUrl: "src/assets/bigroom.jpg" },
+        { id: 2, title: "Engagement Room", description: "Perfect for team collaborations", imageUrl: "src/assets/teamroom.png" },
+        { id: 3, title: "Leave me aRoom", description: "A quiet zone to focus", imageUrl: "src/assets/quiteroom.jpg" },
+    ]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
@@ -46,14 +52,7 @@ export default function BookingPage() {
 
     const handleCreateOrUpdateBooking = async (e) => {
         e.preventDefault();
-        const bookingData = {
-            title,
-            description,
-            date,
-            time,
-            phone_number,
-            email,
-        };
+        const bookingData = { title, description, date, time, phone_number, email, };
 
         try {
             if (selectedBooking) {
@@ -110,17 +109,31 @@ export default function BookingPage() {
         setEmail("");
     };
 
+    const handleBookRoom = (room) => {
+        setTitle(room.title);
+        setDescription(room.description);
+        setModalShow(true);
+    };
+
     return (
         <Container className="mt-4">
             <Row className="mb-3">
                 <Col>
-                    <h2>Manage Your Bookings</h2>
+                    <h2>Available Rooms</h2>
                 </Col>
                 <Col className="text-end">
                     <Button variant="primary" onClick={() => setModalShow(true)}>
                         Create New Booking
                     </Button>
                 </Col>
+            </Row>
+
+            <Row>
+                {rooms.map((room) => (
+                    <Col key={room.id} md={4}>
+                        <RoomCard room={room} onBook={handleBookRoom} />
+                    </Col>
+                ))}
             </Row>
 
             {/* Booking List */}
