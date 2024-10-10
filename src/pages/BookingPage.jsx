@@ -1,13 +1,13 @@
 // frontend/src/pages/BookingPage.jsx
 import { useEffect, useState, useCallback } from "react";
-import { Button, Form, Container, ListGroup, Modal, Row, Col } from "react-bootstrap";
+import { Button, Navbar, Nav, Form, Container, ListGroup, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import useLocalStorage from "use-local-storage";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RoomCard from "../components/RoomCard";
 
 export default function BookingPage() {
-    const [authToken] = useLocalStorage("authToken", "");
+    const [authToken, setAuthToken] = useLocalStorage("authToken", "");
     const [bookings, setBookings] = useState([]);
     const [rooms] = useState([
         { id: 1, title: "City View Room", description: "A spacious room for general meetings", imageUrl: "src/assets/bigroom.jpg" },
@@ -115,133 +115,164 @@ export default function BookingPage() {
         setModalShow(true);
     };
 
+    const handleLogout = () => {
+        setAuthToken("");
+    };
+
     return (
-        <Container className="mt-4">
-            <Row className="mb-3">
-                <Col>
-                    <h2>Available Rooms</h2>
-                </Col>
-                <Col className="text-end">
-                    <Button variant="primary" onClick={() => setModalShow(true)}>
-                        Create New Booking
-                    </Button>
-                </Col>
-            </Row>
+        <>
+            <Navbar bg="light" expand="lg">
+                <Container>
+                    <Navbar.Brand as={Link} to="/">
+                        <i
+                            className="bi bi-buildings"
+                            style={{ fontSize: 30, color: "dodgerblue" }}
+                        ></i>{" "}
+                        Co-Working Space
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse className="justify-content-end">
+                        <Nav>
+                            <Button variant="primary" onClick={handleLogout} className="me-2">
+                                Logout
+                            </Button>
+                            <Button as={Link} to="/bookings" variant="secondary">
+                                Manage Bookings
+                            </Button>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
 
-            <Row>
-                {rooms.map((room) => (
-                    <Col key={room.id} md={4}>
-                        <RoomCard room={room} onBook={handleBookRoom} />
+            <Container className="mt-4">
+                <Row className="mb-3">
+                    <Col>
+                        <h2>Available Rooms</h2>
                     </Col>
-                ))}
-            </Row>
-
-            {/* Booking List */}
-            {bookings.length > 0 ? (
-                <ListGroup>
-                    {bookings.map((booking) => (
-                        <ListGroup.Item key={booking.id}>
-                            <Row>
-                                <Col md={8}>
-                                    <h5>{booking.title}</h5>
-                                    <p>{booking.description}</p>
-                                    <p><strong>Date:</strong> {booking.date.split('T')[0]} <strong>Time:</strong> {booking.time}</p>
-                                    <p><strong>Phone:</strong> {booking.phone_number} <strong>Email:</strong> {booking.email}</p>
-                                </Col>
-                                <Col md={4} className="d-flex align-items-center justify-content-end">
-                                    <Button variant="warning" size="sm" onClick={() => handleEditBooking(booking)} className="me-2">
-                                        Edit
-                                    </Button>
-                                    <Button variant="danger" size="sm" onClick={() => handleDeleteBooking(booking.id)}>
-                                        Delete
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </ListGroup.Item>
-                    ))}
-                </ListGroup>
-            ) : (
-                <p>No bookings found. Create one!</p>
-            )}
-
-            {/* Modal for Create/Update Booking */}
-            <Modal show={modalShow} onHide={handleCloseModal} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>{selectedBooking ? "Update Booking" : "Create Booking"}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleCreateOrUpdateBooking}>
-                        <Form.Group className="mb-3" controlId="formTitle">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter booking title"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formDescription">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                placeholder="Enter description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formDate">
-                            <Form.Label>Date</Form.Label>
-                            <Form.Control
-                                type="date"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formTime">
-                            <Form.Label>Time</Form.Label>
-                            <Form.Control
-                                type="time"
-                                value={time}
-                                onChange={(e) => setTime(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formPhoneNumber">
-                            <Form.Label>Phone Number</Form.Label>
-                            <Form.Control
-                                type="tel"
-                                placeholder="Enter phone number"
-                                value={phone_number}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Enter email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            {selectedBooking ? "Update Booking" : "Create Booking"}
+                    <Col className="text-end">
+                        <Button variant="primary" onClick={() => setModalShow(true)}>
+                            Create New Booking
                         </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-        </Container>
+                    </Col>
+                </Row>
+
+                <Row>
+                    {rooms.map((room) => (
+                        <Col key={room.id} md={4}>
+                            <RoomCard room={room} onBook={handleBookRoom} />
+                        </Col>
+                    ))}
+                </Row>
+
+                {/* Booking List */}
+                {bookings.length > 0 ? (
+                    <ListGroup>
+                        {bookings.map((booking) => (
+                            <ListGroup.Item key={booking.id}>
+                                <Row>
+                                    <Col md={8}>
+                                        <h5>{booking.title}</h5>
+                                        <p>{booking.description}</p>
+                                        <p><strong>Date:</strong> {booking.date.split('T')[0]} <strong>Time:</strong> {booking.time}</p>
+                                        <p><strong>Phone:</strong> {booking.phone_number} <strong>Email:</strong> {booking.email}</p>
+                                    </Col>
+                                    <Col md={4} className="d-flex align-items-center justify-content-end">
+                                        <Button variant="warning" size="sm" onClick={() => handleEditBooking(booking)} className="me-2">
+                                            Edit
+                                        </Button>
+                                        <Button variant="danger" size="sm" onClick={() => handleDeleteBooking(booking.id)}>
+                                            Delete
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </ListGroup.Item>
+                        ))}
+                    </ListGroup>
+                ) : (
+                    <p>No bookings found. Create one!</p>
+                )}
+
+
+                {/* Modal for Create/Update Booking */}
+                <Modal show={modalShow} onHide={handleCloseModal} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{selectedBooking ? "Update Booking" : "Create Booking"}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form onSubmit={handleCreateOrUpdateBooking}>
+                            <Form.Group className="mb-3" controlId="formTitle">
+                                <Form.Label>Title</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter booking title"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formDescription">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    placeholder="Enter description"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formDate">
+                                <Form.Label>Date</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formTime">
+                                <Form.Label>Time</Form.Label>
+                                <Form.Control
+                                    type="time"
+                                    value={time}
+                                    onChange={(e) => setTime(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formPhoneNumber">
+                                <Form.Label>Phone Number</Form.Label>
+                                <Form.Control
+                                    type="tel"
+                                    placeholder="Enter phone number"
+                                    value={phone_number}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formEmail">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    placeholder="Enter email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Button variant="primary" type="submit">
+                                {selectedBooking ? "Update Booking" : "Create Booking"}
+                            </Button>
+                        </Form>
+                    </Modal.Body>
+                </Modal>
+            </Container>
+        </>
     );
 }
+
