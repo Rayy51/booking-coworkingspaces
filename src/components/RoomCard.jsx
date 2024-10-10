@@ -1,6 +1,6 @@
 
 import { Card, Button } from 'react-bootstrap';
-import './RoomCard.css'; // Import the CSS file for styles
+import './RoomCard.css';
 
 const RoomCard = ({ room, onBook }) => {
     return (

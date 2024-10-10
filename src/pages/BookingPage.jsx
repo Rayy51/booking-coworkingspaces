@@ -55,12 +55,10 @@ export default function BookingPage() {
 
         try {
             if (selectedBooking) {
-                // Update booking
                 await axios.put(`${API_BASE_URL}/bookings/${selectedBooking.id}`, bookingData, {
                     headers: { Authorization: `Bearer ${authToken}` },
                 });
             } else {
-                // Create booking
                 await axios.post(`${API_BASE_URL}/bookings`, bookingData, {
                     headers: { Authorization: `Bearer ${authToken}` },
                 });
@@ -91,7 +89,7 @@ export default function BookingPage() {
         setTitle(booking.title);
         setDescription(booking.description);
         setDate(booking.date.split('T')[0]);
-        setTime(booking.time.slice(0, 5)); // Format time for input
+        setTime(booking.time.slice(0, 5));
         setPhoneNumber(booking.phone_number);
         setEmail(booking.email);
         setModalShow(true);
@@ -191,8 +189,6 @@ export default function BookingPage() {
                     <p>No bookings found. Create one!</p>
                 )}
 
-
-                {/* Modal for Create/Update Booking */}
                 <Modal show={modalShow} onHide={handleCloseModal} centered>
                     <Modal.Header closeButton>
                         <Modal.Title>{selectedBooking ? "Update Booking" : "Create Booking"}</Modal.Title>
