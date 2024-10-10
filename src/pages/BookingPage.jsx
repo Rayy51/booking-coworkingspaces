@@ -91,7 +91,7 @@ export default function BookingPage() {
         setSelectedBooking(booking);
         setTitle(booking.title);
         setDescription(booking.description);
-        setDate(booking.date.split('T')[0]); // Format date for input
+        setDate(booking.date.split('T')[0]);
         setTime(booking.time.slice(0, 5)); // Format time for input
         setPhoneNumber(booking.phone_number);
         setEmail(booking.email);
@@ -145,7 +145,7 @@ export default function BookingPage() {
                                 <Col md={8}>
                                     <h5>{booking.title}</h5>
                                     <p>{booking.description}</p>
-                                    <p><strong>Date:</strong> {booking.date} <strong>Time:</strong> {booking.time}</p>
+                                    <p><strong>Date:</strong> {booking.date.split('T')[0]} <strong>Time:</strong> {booking.time}</p>
                                     <p><strong>Phone:</strong> {booking.phone_number} <strong>Email:</strong> {booking.email}</p>
                                 </Col>
                                 <Col md={4} className="d-flex align-items-center justify-content-end">
