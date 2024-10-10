@@ -1,4 +1,3 @@
-// frontend/src/pages/BookingPage.jsx
 import { useEffect, useState, useCallback } from "react";
 import { Button, Navbar, Nav, Form, Container, ListGroup, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";

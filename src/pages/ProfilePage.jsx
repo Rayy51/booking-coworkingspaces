@@ -1,8 +1,8 @@
-
 import { useEffect } from "react";
 import { Navbar, Container, Button, Nav } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import useLocalStorage from "use-local-storage";
+import "./ProfilePage.css";
 
 export default function ProfilePage() {
     const [authToken, setAuthToken] = useLocalStorage("authToken", "");
@@ -43,15 +43,16 @@ export default function ProfilePage() {
                 </Container>
             </Navbar>
 
-            <Container className="mt-4">
-                <h2>Your Profile</h2>
-                {/* You can add more profile details here */}
-                <p>Welcome to your profile page!</p>
-                {/* Navigation to Bookings */}
-                <Button as={Link} to="/bookings" variant="secondary" className="mt-3">
-                    Go to Bookings
-                </Button>
-            </Container>
+            <div className="profile-page-background">
+                <Container className="mt-4 text-white text-center">
+                    <h2>Your Profile</h2>
+                    <p>Welcome to your personalized space!</p>
+                    <p>Here you can manage your bookings and explore your favorite co-working spots.</p>
+                    <Button as={Link} to="/bookings" variant="light" className="mt-3">
+                        Go to Bookings
+                    </Button>
+                </Container>
+            </div>
         </>
     );
 }
