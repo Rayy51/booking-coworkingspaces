@@ -9,9 +9,9 @@ export default function BookingPage() {
     const [authToken, setAuthToken] = useLocalStorage("authToken", "");
     const [bookings, setBookings] = useState([]);
     const [rooms] = useState([
-        { id: 1, title: "City View Room", description: "A spacious room for general meetings", imageUrl: "src/assets/bigroom.jpg" },
-        { id: 2, title: "Engagement Room", description: "Perfect for team collaborations", imageUrl: "src/assets/teamroom.png" },
-        { id: 3, title: "Leave me aRoom", description: "A quiet zone to focus", imageUrl: "src/assets/quiteroom.jpg" },
+        { id: 1, title: "City View Room", description: "A spacious room for general meetings", imageUrl: "/bigroom.jpg" },
+        { id: 2, title: "Engagement Room", description: "Perfect for team collaborations", imageUrl: "/teamroom.png" },
+        { id: 3, title: "Leave me aRoom", description: "A quiet zone to focus", imageUrl: "/quiteroom.jpg" },
     ]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");

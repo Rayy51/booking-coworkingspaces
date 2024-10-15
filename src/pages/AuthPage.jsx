@@ -5,7 +5,7 @@ import useLocalStorage from "use-local-storage";
 import { useNavigate } from "react-router-dom";
 
 export default function AuthPage() {
-    const loginImage = 'src/assets/coworking.png';
+    const loginImage = '/coworking.png';
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const [modalShow, setModalShow] = useState(null);
     const handleShowSignUp = () => setModalShow("SignUp");
