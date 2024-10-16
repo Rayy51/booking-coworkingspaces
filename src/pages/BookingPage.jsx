@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Button, Navbar, Nav, Form, Container, ListGroup, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import useLocalStorage from "use-local-storage";
 import { Link, useNavigate } from "react-router-dom";
 import RoomCard from "../components/RoomCard";
 
