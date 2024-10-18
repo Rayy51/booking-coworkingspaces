@@ -1,12 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { Button, Navbar, Nav, Form, Container, ListGroup, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import useLocalStorage from "use-local-storage";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "..//components/AuthProvider";
+import { useContext } from "react";
 import RoomCard from "../components/RoomCard";
+import { getAuth, signOut } from "firebase/auth"
 
 export default function BookingPage() {
-    const [authToken, setAuthToken] = useLocalStorage("authToken", "");
     const [bookings, setBookings] = useState([]);
     const [rooms] = useState([
         { id: 1, title: "City View Room", description: "A spacious room for general meetings", imageUrl: "/bigroom.jpg" },
@@ -24,12 +25,14 @@ export default function BookingPage() {
     const navigate = useNavigate();
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const { currentUser } = useContext(AuthContext)
 
     const fetchBookings = useCallback(async () => {
-        if (!authToken) return;
+        if (!currentUser) return;
         try {
+            const token = await currentUser.getIdToken();
             const response = await axios.get(`${API_BASE_URL}/bookings`, {
-                headers: { Authorization: `Bearer ${authToken}` },
+                headers: { Authorization: `Bearer ${token}` },
             });
             setBookings(response.data);
         } catch (error) {
@@ -39,28 +42,29 @@ export default function BookingPage() {
                 navigate("/login");
             }
         }
-    }, [authToken, API_BASE_URL, navigate]);
+    }, [currentUser, API_BASE_URL, navigate]);
 
     useEffect(() => {
-        if (!authToken) {
+        if (!currentUser) {
             navigate("/login");
         } else {
             fetchBookings();
         }
-    }, [authToken, fetchBookings, navigate]);
+    }, [currentUser, fetchBookings, navigate]);
 
     const handleCreateOrUpdateBooking = async (e) => {
         e.preventDefault();
         const bookingData = { title, description, date, time, phone_number, email, };
 
         try {
+            const token = await currentUser.getIdToken();
             if (selectedBooking) {
                 await axios.put(`${API_BASE_URL}/bookings/${selectedBooking.id}`, bookingData, {
-                    headers: { Authorization: `Bearer ${authToken}` },
+                    headers: { Authorization: `Bearer ${token}` },
                 });
             } else {
                 await axios.post(`${API_BASE_URL}/bookings`, bookingData, {
-                    headers: { Authorization: `Bearer ${authToken}` },
+                    headers: { Authorization: `Bearer ${token}` },
                 });
             }
             fetchBookings();
@@ -74,8 +78,9 @@ export default function BookingPage() {
     const handleDeleteBooking = async (id) => {
         if (!window.confirm("Are you sure you want to delete this booking?")) return;
         try {
+            const token = await currentUser.getIdToken();
             await axios.delete(`${API_BASE_URL}/bookings/${id}`, {
-                headers: { Authorization: `Bearer ${authToken}` },
+                headers: { Authorization: `Bearer ${token}` },
             });
             fetchBookings();
         } catch (error) {
@@ -112,8 +117,15 @@ export default function BookingPage() {
         setModalShow(true);
     };
 
-    const handleLogout = () => {
-        setAuthToken("");
+    const auth = getAuth();
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigate("/login");
+        } catch (error) {
+            console.error("Error signing out:", error);
+            alert("Error signing out");
+        }
     };
 
     return (

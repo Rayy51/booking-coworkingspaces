@@ -1,31 +1,31 @@
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, } from "firebase/auth"
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
-import axios from "axios";
-import useLocalStorage from "use-local-storage";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../components/AuthProvider";
 
 export default function AuthPage() {
     const loginImage = '/coworking.png';
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const auth = getAuth();
+    const { currentUser } = useContext(AuthContext);
     const [modalShow, setModalShow] = useState(null);
     const handleShowSignUp = () => setModalShow("SignUp");
     const handleShowLogin = () => setModalShow("Login");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [authToken, setAuthToken] = useLocalStorage("authToken", "");
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (authToken) {
+        if (currentUser) {
             navigate("/profile");
         }
-    }, [authToken, navigate])
+    }, [currentUser, navigate])
 
     const handleSignUp = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${API_BASE_URL}/signup`, { username, password });
+            const res = await createUserWithEmailAndPassword(auth, username, password);
             console.log(res.data);
         } catch (error) {
             console.error(error);
@@ -35,14 +35,7 @@ export default function AuthPage() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${API_BASE_URL}/login`, { username, password });
-            if (res.data && res.data.auth === true && res.data.token) {
-                setAuthToken(res.data.token);
-                console.log("Login was successful, token saved");
-
-            } else {
-                alert("Invalid login response");
-            }
+            await signInWithEmailAndPassword(auth, username, password);
         } catch (error) {
             console.error(error);
             alert(error.response?.data?.message || "Login failed");

@@ -1,21 +1,21 @@
-import { useEffect } from "react";
+import { useContext } from "react";
 import { Navbar, Container, Button, Nav } from "react-bootstrap";
+import { getAuth } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
-import useLocalStorage from "use-local-storage";
+import { AuthContext } from "../components/AuthProvider";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-    const [authToken, setAuthToken] = useLocalStorage("authToken", "");
+    const auth = getAuth();
     const navigate = useNavigate();
+    const { currentUser } = useContext(AuthContext)
 
-    useEffect(() => {
-        if (!authToken) {
-            navigate("/login");
-        }
-    }, [authToken, navigate]);
+    if (!currentUser) {
+        navigate("/login");
+    }
 
     const handleLogout = () => {
-        setAuthToken("");
+        auth.signOut()
     };
 
     return (
