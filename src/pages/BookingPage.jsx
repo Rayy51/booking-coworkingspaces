@@ -24,7 +24,7 @@ export default function BookingPage() {
     const [modalShow, setModalShow] = useState(false);
     const navigate = useNavigate();
 
-    const API_BASE_URL = "https://2f42acbb-c643-4c51-8186-a1ae5c03ece5-00-30egcnzso1ps1.sisko.repl.co";
+    const API_BASE_URL = "https://e125178b-9181-41fc-9d37-4494af49bb12-00-1252t1ne5efu2.sisko.replit.dev";
     const { currentUser } = useContext(AuthContext)
 
     const fetchBookings = useCallback(async () => {
