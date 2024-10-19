@@ -24,16 +24,14 @@ export default function BookingPage() {
     const [modalShow, setModalShow] = useState(false);
     const navigate = useNavigate();
 
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const API_BASE_URL = "https://2f42acbb-c643-4c51-8186-a1ae5c03ece5-00-30egcnzso1ps1.sisko.repl.co";
     const { currentUser } = useContext(AuthContext)
 
     const fetchBookings = useCallback(async () => {
         if (!currentUser) return;
         try {
-            const token = await currentUser.getIdToken();
-            const response = await axios.get(`${API_BASE_URL}/bookings`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const uid = currentUser.uid;
+            const response = await axios.get(`${API_BASE_URL}/bookings?user_id=${uid}`);
             setBookings(response.data);
         } catch (error) {
             console.error("Error fetching bookings:", error);
@@ -42,30 +40,26 @@ export default function BookingPage() {
                 navigate("/login");
             }
         }
-    }, [currentUser, API_BASE_URL, navigate]);
+    }, [currentUser, navigate]);
 
     useEffect(() => {
         if (!currentUser) {
             navigate("/login");
         } else {
             fetchBookings();
+            console.log("fetchBookings")
         }
     }, [currentUser, fetchBookings, navigate]);
 
     const handleCreateOrUpdateBooking = async (e) => {
         e.preventDefault();
-        const bookingData = { title, description, date, time, phone_number, email, };
-
+        const uid = await currentUser.uid;
+        const bookingData = { title, description, date, time, phone_number, email, user_id: uid };
         try {
-            const token = await currentUser.getIdToken();
             if (selectedBooking) {
-                await axios.put(`${API_BASE_URL}/bookings/${selectedBooking.id}`, bookingData, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                await axios.put(`${API_BASE_URL}/bookings/${selectedBooking.id}`, bookingData)
             } else {
-                await axios.post(`${API_BASE_URL}/bookings`, bookingData, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                await axios.post(`${API_BASE_URL}/bookings`, bookingData);
             }
             fetchBookings();
             handleCloseModal();
@@ -78,10 +72,8 @@ export default function BookingPage() {
     const handleDeleteBooking = async (id) => {
         if (!window.confirm("Are you sure you want to delete this booking?")) return;
         try {
-            const token = await currentUser.getIdToken();
-            await axios.delete(`${API_BASE_URL}/bookings/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const uid = currentUser.uid;
+            await axios.delete(`${API_BASE_URL}/bookings/${id}?user_id=${uid}`);
             fetchBookings();
         } catch (error) {
             console.error("Error deleting booking:", error);
