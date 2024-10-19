@@ -3,6 +3,7 @@ import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import BookingPage from "./pages/BookingPage";
 import { AuthProvider } from "./components/AuthProvider";
+import UserProfile from "./pages/UserProfile";
 
 
 
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/login" element={<AuthPage />} />
           <Route path="/bookings" element={<BookingPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/user" element={<UserProfile />} />
           <Route path="*" element={<AuthPage />} />
         </Routes>
       </BrowserRouter>
