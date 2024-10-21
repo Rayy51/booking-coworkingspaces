@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "../firebase"; // Firestore instance
-import { AuthContext } from "../components/AuthProvider"; // Auth context
+import { db } from "../firebase";
+import { AuthContext } from "../components/AuthProvider";
 import { Button, Form, Container, Image, Alert, Row, Col, Card } from "react-bootstrap";
-import './UserProfile.css'; // Custom styles
+import './UserProfile.css';
+import NavbarComponent from "../components/NavbarComponent";
 
 const UserProfile = () => {
     const { currentUser } = useContext(AuthContext);
@@ -55,37 +56,40 @@ const UserProfile = () => {
     };
 
     return (
-        <Container className="profile-container mt-4">
-            <Card className="text-center mb-4" style={{ backgroundColor: '#d3d3d3' }}>
-                <Card.Body>
-                    <Card.Title>Welcome, {currentUser?.displayName || "User"}!</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">{currentUser?.email || "N/A"}</Card.Subtitle>
-                </Card.Body>
-            </Card>
+        <>
+            <NavbarComponent />
+            <Container className="profile-container mt-4">
+                <Card className="text-center mb-4" style={{ backgroundColor: '#d3d3d3' }}>
+                    <Card.Body>
+                        <Card.Title>Welcome, {currentUser?.displayName || "User"}!</Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted">{currentUser?.email || "N/A"}</Card.Subtitle>
+                    </Card.Body>
+                </Card>
 
-            <Row className="justify-content-center">
-                <Col xs={12} md={6} className="text-center">
-                    {imageUrl && (
-                        <Image src={imageUrl} alt="Profile" roundedCircle className="profile-image mb-4" />
-                    )}
-                </Col>
-            </Row>
+                <Row className="justify-content-center">
+                    <Col xs={12} md={6} className="text-center">
+                        {imageUrl && (
+                            <Image src={imageUrl} alt="Profile" roundedCircle className="profile-image mb-4" />
+                        )}
+                    </Col>
+                </Row>
 
-            <Row className="justify-content-center">
-                <Col xs={12} md={6}>
-                    <Form className="mt-4">
-                        <Form.Group>
-                            <Form.Label>Choose an image to upload</Form.Label>
-                            <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
-                        </Form.Group>
-                        <Button onClick={handleUpload} disabled={loading || !image || !currentUser} className="mt-3">
-                            {loading ? "Uploading..." : "Upload"}
-                        </Button>
-                    </Form>
-                    {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
-                </Col>
-            </Row>
-        </Container>
+                <Row className="justify-content-center">
+                    <Col xs={12} md={6}>
+                        <Form className="mt-4">
+                            <Form.Group>
+                                <Form.Label>Choose an image to upload</Form.Label>
+                                <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
+                            </Form.Group>
+                            <Button onClick={handleUpload} disabled={loading || !image || !currentUser} className="mt-3">
+                                {loading ? "Uploading..." : "Upload"}
+                            </Button>
+                        </Form>
+                        {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+                    </Col>
+                </Row>
+            </Container>
+        </>
     );
 };
 

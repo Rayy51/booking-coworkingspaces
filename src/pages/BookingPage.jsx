@@ -1,11 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
-import { Button, Navbar, Nav, Form, Container, ListGroup, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Button, Col, Container, Form, ListGroup, Modal, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "..//components/AuthProvider";
-import { useContext } from "react";
+import NavbarComponent from "../components/NavbarComponent";
 import RoomCard from "../components/RoomCard";
-import { getAuth, signOut } from "firebase/auth"
 
 export default function BookingPage() {
     const [bookings, setBookings] = useState([]);
@@ -109,43 +108,10 @@ export default function BookingPage() {
         setModalShow(true);
     };
 
-    const auth = getAuth();
-    const handleLogout = async () => {
-        try {
-            await signOut(auth);
-            navigate("/login");
-        } catch (error) {
-            console.error("Error signing out:", error);
-            alert("Error signing out");
-        }
-    };
 
     return (
         <>
-            <Navbar bg="dark" variant="dark" expand="lg">
-                <Container>
-                    <Navbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center' }}>
-                        <i
-                            className="bi bi-buildings"
-                            style={{ fontSize: 30, color: "dodgerblue", marginRight: 8 }}
-                        ></i>
-                        <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'Boldblack' }}>
-                            CoWorkia
-                        </span>
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse className="justify-content-end">
-                        <Nav>
-                            <Button variant="primary" onClick={handleLogout} className="me-2">
-                                Logout
-                            </Button>
-                            <Button as={Link} to="/bookings" variant="secondary">
-                                Manage Bookings
-                            </Button>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+            <NavbarComponent />
 
             <Container className="mt-4">
                 <Row className="mb-3">
