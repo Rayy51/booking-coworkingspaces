@@ -1,0 +1,29 @@
+.profile-container {
+    background-color: #f8f9fa;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image {
+    width: 180px;
+    height: 180px;
+    border: 3px solid dodgerblue;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card {
+    border: none;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #d3d3d3;
+}
+
+.btn-info {
+    background-color: dodgerblue;
+    border: none;
+}
+
+.btn-info:hover {
+    background-color: #007bff;
+}

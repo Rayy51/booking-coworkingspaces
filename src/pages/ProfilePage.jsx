@@ -20,14 +20,16 @@ export default function ProfilePage() {
 
     return (
         <>
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="dark" variant="dark" expand="lg">
                 <Container>
-                    <Navbar.Brand as={Link} to="/">
+                    <Navbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center' }}>
                         <i
                             className="bi bi-buildings"
-                            style={{ fontSize: 30, color: "dodgerblue" }}
-                        ></i>{" "}
-                        Co-Working Space
+                            style={{ fontSize: 30, color: "dodgerblue", marginRight: 8 }}
+                        ></i>
+                        <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'Boldblack' }}>
+                            CoWorkia
+                        </span>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse className="justify-content-end">
@@ -45,8 +47,9 @@ export default function ProfilePage() {
 
             <div className="profile-page-background">
                 <Container className="mt-4 text-white text-center">
-                    <h2>Your Profile</h2>
-                    <p>Welcome to your personalized space!</p>
+                    <h1>
+                        Find your perfect office space today!</h1>
+                    <p>Whether you’re just starting your own business or an established enterprise, we’ve got the workspace for your exact business needs.</p>
                     <p>Here you can manage your bookings and explore your favorite co-working spots.</p>
                     <Button as={Link} to="/bookings" variant="light" className="mt-3">
                         Go to Bookings

@@ -122,14 +122,16 @@ export default function BookingPage() {
 
     return (
         <>
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="dark" variant="dark" expand="lg">
                 <Container>
-                    <Navbar.Brand as={Link} to="/">
+                    <Navbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center' }}>
                         <i
                             className="bi bi-buildings"
-                            style={{ fontSize: 30, color: "dodgerblue" }}
-                        ></i>{" "}
-                        Co-Working Space
+                            style={{ fontSize: 30, color: "dodgerblue", marginRight: 8 }}
+                        ></i>
+                        <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'Boldblack' }}>
+                            CoWorkia
+                        </span>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse className="justify-content-end">
