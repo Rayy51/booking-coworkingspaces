@@ -1,0 +1,35 @@
+.booking-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.booking-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.booking-avatar {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.accent-text {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.booking-card .btn {
+    margin-left: 10px;
+}
+
+/* Responsive button layout for mobile */
+@media (max-width: 767px) {
+    .booking-card .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

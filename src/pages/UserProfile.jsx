@@ -61,7 +61,7 @@ const UserProfile = () => {
             <Container className="profile-container mt-4">
                 <Card className="text-center mb-4" style={{ backgroundColor: '#d3d3d3' }}>
                     <Card.Body>
-                        <Card.Title>Welcome, {currentUser?.displayName || "User"}!</Card.Title>
+                        <Card.Title>Welcome, {currentUser?.displayName || "USER"}!</Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">{currentUser?.email || "N/A"}</Card.Subtitle>
                     </Card.Body>
                 </Card>
