@@ -100,7 +100,7 @@ export default function UserBookingsPage() {
                                             <Col xs={3} className="d-flex align-items-center">
                                                 {/* Display avatar, e.g., room image */}
                                                 <Image
-                                                    src={booking.imageUrl || "/default-avatar.png"}
+                                                    src={booking.imageUrl || "/avataroffice.png"}
                                                     roundedCircle
                                                     className="booking-avatar"
                                                     alt="Room avatar"
@@ -113,7 +113,7 @@ export default function UserBookingsPage() {
                                                     <strong>Date:</strong> <span className="accent-text">{booking.date.split('T')[0]}</span>
                                                 </Card.Text>
                                                 <Card.Text>
-                                                    <strong>Time:</strong> <span className="accent-text">{booking.time}</span>
+                                                    <strong>Time:</strong> <span className="accent-text">{booking.time.slice(0, 5)}</span>
                                                 </Card.Text>
                                                 <Card.Text>
                                                     <strong>Phone:</strong> {booking.phone_number}
@@ -124,7 +124,7 @@ export default function UserBookingsPage() {
                                             </Col>
                                         </Row>
                                         <div className="d-flex justify-content-between align-items-center mt-3">
-                                            <Button variant="warning" size="sm" onClick={() => handleEditBooking(booking)} className="d-flex align-items-center">
+                                            <Button variant="info" size="sm" onClick={() => handleEditBooking(booking)} className="d-flex align-items-center">
                                                 <PencilSquare className="me-2" /> Edit
                                             </Button>
                                             <Button variant="danger" size="sm" onClick={() => handleDeleteBooking(booking.id)} className="d-flex align-items-center">

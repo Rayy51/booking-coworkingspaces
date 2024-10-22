@@ -19,8 +19,8 @@ const NavbarComponent = () => {
     };
 
     return (
-        <Navbar bg="dark" variant="dark" expand="lg">
-            <Container>
+        <Navbar bg="dark" variant="dark" expand="lg" style={{ padding: '0.75rem 1.5rem' }}>
+            <Container fluid>
                 <Navbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center' }}>
                     <i
                         className="bi bi-buildings"
@@ -35,11 +35,17 @@ const NavbarComponent = () => {
                     <Nav>
                         {currentUser && (
                             <>
-                                <Button variant="primary" onClick={handleLogout} className="me-2">
-                                    Logout
-                                </Button>
-                                <Button as={Link} to="/bookings" variant="secondary">
+                                <Button as={Link} to="/bookings" variant="outline-light" className="me-2"
+                                    style={{ fontWeight: '500' }}>
                                     Manage Bookings
+                                </Button>
+                                <Button
+                                    as={Link} to="/mybookings" variant="outline-light" className="me-3"
+                                    style={{ fontWeight: '500' }}>
+                                    My Bookings
+                                </Button>
+                                <Button variant="danger" onClick={handleLogout} style={{ fontWeight: '500' }}>
+                                    Logout
                                 </Button>
                             </>
                         )}
