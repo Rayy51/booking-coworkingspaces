@@ -1,29 +1,66 @@
 .profile-container {
-    background-color: #f8f9fa;
-    padding: 40px;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f0f4f8;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card {
+    background: linear-gradient(135deg, #f0f8ff 0%, #e0f7fa 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-text {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #00f2fe;
+    border-radius: 50%;
+}
+
+.default-image {
+    width: 150px;
+    height: 150px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.upload-btn {
+    background-color: #4facfe;
+    border: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.upload-btn:hover {
+    background-color: #00f2fe;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.profile-image {
-    width: 180px;
-    height: 180px;
-    border: 3px solid dodgerblue;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.card {
-    border: none;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: #d3d3d3;
-}
-
-.btn-info {
-    background-color: dodgerblue;
-    border: none;
-}
-
-.btn-info:hover {
-    background-color: #007bff;
+.shadow-sm {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

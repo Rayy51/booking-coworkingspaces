@@ -59,29 +59,31 @@ const UserProfile = () => {
         <>
             <NavbarComponent />
             <Container className="profile-container mt-4">
-                <Card className="text-center mb-4" style={{ backgroundColor: '#d3d3d3' }}>
+                <Card className="text-center mb-4 profile-card">
                     <Card.Body>
-                        <Card.Title>Welcome, {currentUser?.displayName || "USER"}!</Card.Title>
+                        <Card.Title className="welcome-text">Welcome, {currentUser?.displayName || "USER"}!</Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">{currentUser?.email || "N/A"}</Card.Subtitle>
                     </Card.Body>
                 </Card>
 
                 <Row className="justify-content-center">
                     <Col xs={12} md={6} className="text-center">
-                        {imageUrl && (
-                            <Image src={imageUrl} alt="Profile" roundedCircle className="profile-image mb-4" />
+                        {imageUrl ? (
+                            <Image src={imageUrl} alt="Profile" roundedCircle className="profile-image mb-4 shadow-sm" />
+                        ) : (
+                            <div className="default-image mb-4 shadow-sm"></div>
                         )}
                     </Col>
                 </Row>
 
                 <Row className="justify-content-center">
                     <Col xs={12} md={6}>
-                        <Form className="mt-4">
+                        <Form className="mt-4 form-container">
                             <Form.Group>
-                                <Form.Label>Choose an image to upload</Form.Label>
+                                <Form.Label className="form-label">Choose an image to upload</Form.Label>
                                 <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
                             </Form.Group>
-                            <Button onClick={handleUpload} disabled={loading || !image || !currentUser} className="mt-3">
+                            <Button onClick={handleUpload} disabled={loading || !image || !currentUser} className="mt-3 upload-btn">
                                 {loading ? "Uploading..." : "Upload"}
                             </Button>
                         </Form>

@@ -156,12 +156,12 @@ export default function BookingPage() {
                                         contact@Coworkia.com <br />
                                     </div>
                                     <strong>Operating Hours:</strong><br />
-                                    <strong>Monday:</strong> 8:00 AM - 5:00 PM <br />
-                                    <strong>Tuesday:</strong> 8:00 AM - 5:00 PM <br />
-                                    <strong>Wednesday:</strong> 8:00 AM - 5:00 PM <br />
-                                    <strong>Thursday:</strong> 8:00 AM - 5:00 PM <br />
-                                    <strong>Friday:</strong> 9:00 AM - 5:00 PM <br />
-                                    <strong>Saturday:</strong> By Appointment Only <br />
+                                    <strong>Monday:</strong> 8:00 AM - 10:00 PM <br />
+                                    <strong>Tuesday:</strong> 8:00 AM - 10:00 PM <br />
+                                    <strong>Wednesday:</strong> 8:00 AM - 10:00 PM <br />
+                                    <strong>Thursday:</strong> 8:00 AM - 10:00 PM <br />
+                                    <strong>Friday:</strong> 9:00 AM - 10:00 PM <br />
+                                    <strong>Saturday:</strong> 9:00 AM - 4:00 PM <br />
                                     <strong>Sunday:</strong> By Appointment Only
                                 </Card.Text>
                             </Card.Body>
