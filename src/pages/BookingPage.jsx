@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useContext, useState } from "react";
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import { useContext, useEffect, useState } from "react";
+import { Button, Card, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { AuthContext } from "../components/AuthProvider";
 import NavbarComponent from "../components/NavbarComponent";
 import RoomCard from "../components/RoomCard";
+import { WiDaySunny, WiRain, WiThunderstorm, WiCloudy, WiSnow } from "react-icons/wi"
 
 export default function BookingPage() {
     const [rooms] = useState([
@@ -18,9 +19,39 @@ export default function BookingPage() {
     const [phone_number, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const [modalShow, setModalShow] = useState(false);
+    const [weather, setWeather] = useState(null);
+    const lat = 2.996889;
+    const lon = 101.673523;
 
-    const API_BASE_URL = "https://e125178b-9181-41fc-9d37-4494af49bb12-00-1252t1ne5efu2.sisko.replit.dev";
+    const API_BASE_URL = "https://92ce2606-e5fd-417e-8276-af885179de83-00-ucopt79ladmi.pike.replit.dev";
+    const WEATHER_API_KEY = import.meta.env.VITE_API_WEATHER
     const { currentUser } = useContext(AuthContext)
+
+    useEffect(() => {
+        const fetchWeather = async () => {
+            try {
+                const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`);
+                setWeather(response.data);
+            } catch (error) {
+                console.error("Error fetching weather data:", error)
+            }
+        };
+        fetchWeather();
+    }, [WEATHER_API_KEY]);
+
+    const getWeatherIcon = (description) => {
+        if (description.includes("rain")) {
+            return <WiRain size={30} />; // Adjust icon size
+        } else if (description.includes("thunderstorm")) {
+            return <WiThunderstorm size={30} />;
+        } else if (description.includes("cloud")) {
+            return <WiCloudy size={30} />;
+        } else if (description.includes("snow")) {
+            return <WiSnow size={30} />;
+        } else {
+            return <WiDaySunny size={30} />;
+        }
+    };
 
     const handleCreateBooking = async (e) => {
         e.preventDefault();
@@ -54,7 +85,7 @@ export default function BookingPage() {
 
     return (
         <>
-            <NavbarComponent />
+            <NavbarComponent weather={weather} />
 
             <Container className="mt-4">
                 <Row className="mb-3">
@@ -69,16 +100,45 @@ export default function BookingPage() {
                 </Row>
 
                 <Row>
-                    {rooms.map((room) => (
-                        <Col key={room.id} md={4}>
-                            <RoomCard room={room} onBook={handleBookRoom} />
-                        </Col>
-                    ))}
+                    <Col md={8}>
+                        <Row>
+                            {rooms.map((room) => (
+                                <Col key={room.id} md={6} className="mb-4">
+                                    <RoomCard room={room} onBook={handleBookRoom} />
+                                </Col>
+                            ))}
+                        </Row>
+                    </Col>
+
+                    <Col md={4}>
+                        {weather && (
+                            <Card style={{
+                                background: "linear-gradient(135deg, #f0f8ff 0%, #e0f7fa 100%)",
+                                border: "1px solid #ddd",
+                                borderRadius: "15px",
+                                padding: "15px",
+                                textAlign: "center",
+                                boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
+                                marginBottom: "20px"
+                            }}>
+                                <Card.Body>
+                                    <Card.Title style={{ fontSize: '1.25rem' }}>Current Weather</Card.Title>
+                                    {getWeatherIcon(weather.weather[0].description)}
+                                    <Card.Text style={{ fontSize: "1rem", marginTop: "10px" }}>
+                                        <strong>Temp:</strong> {weather.main.temp}°C <br />
+                                        <strong>Weather:</strong> {weather.weather[0].description} <br />
+                                        <strong>Humidity:</strong> {weather.main.humidity}% <br />
+                                        <strong>Wind:</strong> {weather.wind.speed} m/s
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        )}
+                    </Col>
                 </Row>
 
                 <Modal show={modalShow} onHide={handleCloseModal} centered>
                     <Modal.Header closeButton>
-                        <Modal.Title> Create Booking </Modal.Title>
+                        <Modal.Title>Create Booking</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form onSubmit={handleCreateBooking}>
@@ -157,4 +217,3 @@ export default function BookingPage() {
         </>
     );
 }
-

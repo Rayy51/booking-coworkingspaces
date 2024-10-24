@@ -14,7 +14,7 @@ export default function UserBookingsPage() {
 
     const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
-    const API_BASE_URL = "https://e125178b-9181-41fc-9d37-4494af49bb12-00-1252t1ne5efu2.sisko.replit.dev";
+    const API_BASE_URL = "https://92ce2606-e5fd-417e-8276-af885179de83-00-ucopt79ladmi.pike.replit.dev";
 
     const fetchBookings = useCallback(async () => {
         if (!currentUser) return;
@@ -65,7 +65,7 @@ export default function UserBookingsPage() {
             };
 
             await axios.put(`${API_BASE_URL}/bookings/${selectedBooking.id}?user_id=${currentUser.uid}`, updatedBooking);
-            fetchBookings(); // Refresh the list of bookings
+            fetchBookings();
             handleCloseModal();
         } catch (error) {
             console.error("Error updating booking:", error);
@@ -98,7 +98,6 @@ export default function UserBookingsPage() {
                                     <Card.Body>
                                         <Row>
                                             <Col xs={3} className="d-flex align-items-center">
-                                                {/* Display avatar, e.g., room image */}
                                                 <Image
                                                     src={booking.imageUrl || "/avataroffice.png"}
                                                     roundedCircle

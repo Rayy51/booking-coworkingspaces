@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useContext } from "react";
 import { AuthContext } from "../components/AuthProvider";
+import { WiDaySunny, WiRain } from "react-icons/wi"
 
-const NavbarComponent = () => {
+const NavbarComponent = ({ weather }) => {
     const auth = getAuth();
     const { currentUser } = useContext(AuthContext);
 
@@ -29,12 +30,29 @@ const NavbarComponent = () => {
                     <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white' }}>
                         CoWorkia
                     </span>
+
+                    {weather && (
+                        <div style={{ marginLeft: '20px', color: 'white', display: 'flex', alignItems: 'center' }}>
+                            {weather.weather[0].main === 'Rain' ? (
+                                <WiRain size={24} style={{ marginRight: '5px' }} />
+                            ) : (
+                                <WiDaySunny size={24} style={{ marginRight: '5px' }} />
+                            )}
+
+                            <span style={{ fontSize: '1rem' }}>
+                                {weather.main.temp}°C - {weather.weather[0].description}
+                            </span>
+                        </div>
+                    )}
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end">
                     <Nav>
                         {currentUser && (
                             <>
+                                <Nav.Link href="/user" className="ml-2">
+                                    <i className="bi bi-person-circle" style={{ fontSize: '20px', marginRight: "13px" }}></i>
+                                </Nav.Link>
                                 <Button as={Link} to="/bookings" variant="outline-light" className="me-2"
                                     style={{ fontWeight: '500' }}>
                                     Manage Bookings
