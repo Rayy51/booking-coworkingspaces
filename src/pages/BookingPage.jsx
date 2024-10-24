@@ -11,6 +11,7 @@ export default function BookingPage() {
         { id: 1, title: "City View Room", description: "A spacious room for general meetings", imageUrl: "/bigroom.jpg" },
         { id: 2, title: "Engagement Room", description: "Perfect for team collaborations", imageUrl: "/teamroom.png" },
         { id: 3, title: "Leave me aRoom", description: "A quiet zone to focus", imageUrl: "/quiteroom.jpg" },
+        { id: 4, title: "Product Shooting Room", description: "A fully equipped studio for product photography", imageUrl: "/productshooting.jpg" }
     ]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -41,7 +42,7 @@ export default function BookingPage() {
 
     const getWeatherIcon = (description) => {
         if (description.includes("rain")) {
-            return <WiRain size={30} />; // Adjust icon size
+            return <WiRain size={30} />;
         } else if (description.includes("thunderstorm")) {
             return <WiThunderstorm size={30} />;
         } else if (description.includes("cloud")) {
@@ -133,8 +134,41 @@ export default function BookingPage() {
                                 </Card.Body>
                             </Card>
                         )}
+
+                        <Card style={{
+                            background: "#f9f9f9",
+                            border: "1px solid #ccc",
+                            borderRadius: "15px",
+                            padding: "20px",
+                            textAlign: "left",
+                            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
+                            width: "100%",
+                            marginBottom: "20px"
+                        }}>
+                            <Card.Body>
+                                <Card.Title style={{ fontSize: '1.5rem', marginBottom: '15px' }}>Business Information</Card.Title>
+                                <Card.Text style={{ fontSize: "1rem", lineHeight: "2", marginTop: "10px" }}>
+
+                                    <i className="bi bi-geo-alt" style={{ marginRight: "8px" }}></i>
+                                    13A, Taman Equine, Seri Kembangan, 56100 Selangor. <br />
+                                    <div style={{ marginBottom: "20px" }}>
+                                        <i className="bi bi-envelope" style={{ marginRight: "8px" }}></i>
+                                        contact@Coworkia.com <br />
+                                    </div>
+                                    <strong>Operating Hours:</strong><br />
+                                    <strong>Monday:</strong> 8:00 AM - 5:00 PM <br />
+                                    <strong>Tuesday:</strong> 8:00 AM - 5:00 PM <br />
+                                    <strong>Wednesday:</strong> 8:00 AM - 5:00 PM <br />
+                                    <strong>Thursday:</strong> 8:00 AM - 5:00 PM <br />
+                                    <strong>Friday:</strong> 9:00 AM - 5:00 PM <br />
+                                    <strong>Saturday:</strong> By Appointment Only <br />
+                                    <strong>Sunday:</strong> By Appointment Only
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
                     </Col>
                 </Row>
+
 
                 <Modal show={modalShow} onHide={handleCloseModal} centered>
                     <Modal.Header closeButton>
