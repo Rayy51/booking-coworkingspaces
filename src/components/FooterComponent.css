@@ -1,0 +1,14 @@
+/* FooterComponent.css */
+.footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-container {
+    max-width: 800px;
+    margin: auto;
+}
