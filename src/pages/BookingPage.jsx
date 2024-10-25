@@ -4,7 +4,8 @@ import { Button, Card, Col, Container, Form, Modal, Row } from "react-bootstrap"
 import { AuthContext } from "../components/AuthProvider";
 import NavbarComponent from "../components/NavbarComponent";
 import RoomCard from "../components/RoomCard";
-import { WiDaySunny, WiRain, WiThunderstorm, WiCloudy, WiSnow } from "react-icons/wi"
+import { WiDaySunny, WiRain, WiThunderstorm, WiCloudy, WiSnow } from "react-icons/wi";
+import FooterComponent from "../components/FooterComponent";
 
 export default function BookingPage() {
     const [rooms] = useState([
@@ -24,7 +25,7 @@ export default function BookingPage() {
     const lat = 2.996889;
     const lon = 101.673523;
 
-    const API_BASE_URL = "https://92ce2606-e5fd-417e-8276-af885179de83-00-ucopt79ladmi.pike.replit.dev";
+    const API_BASE_URL = "https://92ce2606-e5fd-417e-8276-af885179de83-00-ucopt79ladmi.pike.repl.co";
     const WEATHER_API_KEY = import.meta.env.VITE_API_WEATHER
     const { currentUser } = useContext(AuthContext)
 
@@ -248,6 +249,7 @@ export default function BookingPage() {
                     </Modal.Body>
                 </Modal>
             </Container>
+            <FooterComponent />
         </>
     );
 }

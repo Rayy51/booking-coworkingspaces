@@ -6,6 +6,7 @@ import { AuthContext } from "../components/AuthProvider";
 import { Button, Form, Container, Image, Alert, Row, Col, Card } from "react-bootstrap";
 import './UserProfile.css';
 import NavbarComponent from "../components/NavbarComponent";
+import FooterComponent from "../components/FooterComponent";
 
 const UserProfile = () => {
     const { currentUser } = useContext(AuthContext);
@@ -91,6 +92,7 @@ const UserProfile = () => {
                     </Col>
                 </Row>
             </Container>
+            <FooterComponent />
         </>
     );
 };

@@ -6,6 +6,7 @@ import { AuthContext } from "../components/AuthProvider";
 import NavbarComponent from "../components/NavbarComponent";
 import "./UserBookingPage.css"
 import { PencilSquare, Trash } from "react-bootstrap-icons";
+import FooterComponent from "../components/FooterComponent";
 
 export default function UserBookingsPage() {
     const [bookings, setBookings] = useState([]);
@@ -14,7 +15,7 @@ export default function UserBookingsPage() {
 
     const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
-    const API_BASE_URL = "https://92ce2606-e5fd-417e-8276-af885179de83-00-ucopt79ladmi.pike.replit.dev";
+    const API_BASE_URL = "https://92ce2606-e5fd-417e-8276-af885179de83-00-ucopt79ladmi.pike.repl.co";
 
     const fetchBookings = useCallback(async () => {
         if (!currentUser) return;
@@ -244,6 +245,7 @@ export default function UserBookingsPage() {
                     )}
                 </Modal.Body>
             </Modal>
+            <FooterComponent />
         </>
     );
 }

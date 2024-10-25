@@ -4,6 +4,7 @@ import { AuthContext } from "../components/AuthProvider";
 import NavbarComponent from "../components/NavbarComponent";
 import "./ProfilePage.css";
 import { Button, Container } from "react-bootstrap";
+import FooterComponent from "../components/FooterComponent";
 
 export default function ProfilePage() {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function ProfilePage() {
                     </Button>
                 </Container>
             </div>
+            <FooterComponent />
         </>
     );
 }

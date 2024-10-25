@@ -5,9 +5,6 @@ import BookingPage from "./pages/BookingPage";
 import { AuthProvider } from "./components/AuthProvider";
 import UserProfile from "./pages/UserProfile";
 import UserBookingsPage from "./pages/UserBookingPage";
-import FooterComponent from "./components/FooterComponent";
-
-
 
 export default function App() {
   return (
@@ -22,7 +19,6 @@ export default function App() {
           <Route path="/mybookings" element={<UserBookingsPage />} />
           <Route path="*" element={<AuthPage />} />
         </Routes>
-        <FooterComponent />
       </BrowserRouter>
     </AuthProvider>
   );
